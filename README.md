@@ -157,7 +157,7 @@ find your operating system and package manager for the right instructions~
   # download latest package from github release
   curl -s https://api.github.com/repos/fwdekker/mommy/releases/latest | grep "browser_download_url.*\.freebsd" | cut -d : -f 2,3 | tr -d \" | xargs curl -sLOJ
   # install package
-  sudo pkg add ./mommy-*.freebsd
+  doas pkg add ./mommy-*.freebsd
   ```
 </details>
 
@@ -215,7 +215,7 @@ find your operating system and package manager for the right instructions~
   # download latest package from github release
   curl -s https://api.github.com/repos/fwdekker/mommy/releases/latest | grep "browser_download_url.*netbsd\.tgz" | cut -d : -f 2,3 | tr -d \" | xargs curl -sLOJ
   # install package
-  sudo pkg_add ./mommy-*+netbsd.tgz
+  doas pkg_add ./mommy-*+netbsd.tgz
   ```
 </details>
 
@@ -276,7 +276,7 @@ find your operating system and package manager for the right instructions~
   # download latest package from github release
   curl -s https://api.github.com/repos/fwdekker/mommy/releases/latest | grep "browser_download_url.*openbsd\.tgz" | cut -d : -f 2,3 | tr -d \" | xargs curl -sLOJ
   # install package
-  sudo pkg_add -D unsigned ./mommy-*+openbsd.tgz
+  doas pkg_add -D unsigned ./mommy-*+openbsd.tgz
   ```
 </details>
 
