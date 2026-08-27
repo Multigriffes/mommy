@@ -559,17 +559,19 @@ and similarly so for encouragements~
 inside compliments and encouragements, you can put placeholders that contain the random values that mommy chose.
 for example, if you add the compliment `%%CAREGIVER%% loves you`, and have `MOMMY_CAREGIVER=your mommy`, then mommy outputs `your mommy loves you`~
 
-| variable        | description                                      | note                               |
-|-----------------|--------------------------------------------------|------------------------------------|
-| `%%CAREGIVER%%` | what mommy calls herself                         |                                    |
-| `%%THEY%%`      | mommy's subject pronoun (e.g. they, she, he)     |                                    |
-| `%%THEM%%`      | mommy's object pronoun (e.g. them, her, he)      |                                    |
-| `%%THEIR%%`     | mommy's possessive pronoun (e.g. their, her, he) |                                    |
-| `%%SWEETIE%%`   | what mommy calls you                             |                                    |
-| `%%N%%`         | a newline                                        | can be used inside other variables |
-| `%%S%%`         | a forward slash (`/`)                            | can be used inside other variables |
-| `%%_%%`         | a whitespace                                     | can be used inside other variables |
-| `%%#%%`         | a hash (`#`)                                     | can be used inside other variables |
+| variable         | description                                      | note                               |
+|------------------|--------------------------------------------------|------------------------------------|
+| `%%CAREGIVER%%`  | what mommy calls herself                         |                                    |
+| `%%THEY%%`       | mommy's subject pronoun (e.g. they, she, he)     |                                    |
+| `%%THEM%%`       | mommy's object pronoun (e.g. them, her, he)      |                                    |
+| `%%THEIR%%`      | mommy's possessive pronoun (e.g. their, her, he) |                                    |
+| `%%SWEETIE%%`    | what mommy calls you                             |                                    |
+| `%%BAD_SWEETIE%%`| what mommy calls you when you fail               |                                    |
+| `%%PART%%`       | what mommy part you like                         |                                    |
+| `%%N%%`          | a newline                                        | can be used inside other variables |
+| `%%S%%`          | a forward slash (`/`)                            | can be used inside other variables |
+| `%%_%%`          | a whitespace                                     | can be used inside other variables |
+| `%%#%%`          | a hash (`#`)                                     | can be used inside other variables |
 </details>
 
 
