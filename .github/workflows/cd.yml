@@ -51,7 +51,7 @@ jobs:
           printf "release_aur: '%s'\n" "$RELEASE_AUR"
           printf "release_homebrew: '%s'\n" "$RELEASE_HOMEBREW"
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Extract and validate mommy's version number
         id: mommy_version
         run: |
@@ -82,7 +82,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm and build dependencies
         run: |
           sudo apt install -y rubygems libarchive-tools rpm zstd
@@ -90,7 +90,7 @@ jobs:
       - name: Build packages
         run: make dist/generic dist/apk dist/deb dist/rpm dist/pacman
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-linux
           path: dist/mommy*
@@ -100,13 +100,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm
         run: sudo gem install --no-document fpm
       - name: Build package
         run: make dist/osxpkg
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-macos
           path: dist/mommy*
@@ -116,12 +116,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm && Build package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: freebsd
-          version: "14.3"
+          version: ${{ vars.FREEBSD_VERSION }}
           run: |
             printf "::group::Install basic packages\n"
             sudo pkg install -y git gmake
@@ -149,7 +149,7 @@ jobs:
             gmake dist/freebsd
             printf "::endgroup::\n"
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-freebsd
           path: dist/mommy*
@@ -159,12 +159,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Build package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: netbsd
-          version: "10.1"
+          version: ${{ vars.NETBSD_VERSION }}
           run: |
             set -e
             export PATH="/usr/sbin:$PATH"  # Add 'pkg_*' commands to path
@@ -181,7 +181,7 @@ jobs:
             gmake dist/netbsd
             printf "::endgroup::\n"
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-netbsd
           path: dist/mommy*
@@ -191,12 +191,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm && Build package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: openbsd
-          version: "7.8"
+          version: ${{ vars.OPENBSD_VERSION }}
           run: |
             printf "::group::Install basic packages\n"
             sudo pkg_add git gmake
@@ -216,7 +216,7 @@ jobs:
             gmake dist/openbsd
             printf "::endgroup::\n"
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-openbsd
           path: dist/mommy*
@@ -226,12 +226,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm && Build package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: haiku
-          version: "r1beta5"
+          version: ${{ vars.HAIKU_VERSION }}
           run: |
             printf "::group::Ignore ownership issues\n"
             git config --global --add safe.directory "$GITHUB_WORKSPACE"
@@ -241,7 +241,7 @@ jobs:
             make dist/haiku
             printf "::endgroup::\n"
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-haiku
           path: dist/mommy*
@@ -251,7 +251,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install fpm && Build package
         uses: vmactions/solaris-vm@v1
         with:
@@ -289,7 +289,7 @@ jobs:
             gmake dist/p5p
             printf "::endgroup::\n"
       - name: Upload built package
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: dist-solaris
           path: dist/mommy-*.p5p
@@ -314,9 +314,9 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Download built packages
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           pattern: dist-*
           merge-multiple: true
@@ -340,7 +340,7 @@ jobs:
             --discussion-category announcements
 
       - name: Checkout 'latest'
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           ref: latest
           fetch-depth: 0
@@ -360,11 +360,11 @@ jobs:
 
     steps:
       - name: Checkout mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: src-mommy
       - name: Checkout apt-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/apt-mommy
           path: apt-mommy
@@ -373,7 +373,7 @@ jobs:
           # Required to push '.deb' to repository
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
       - name: Download built packages
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v8
         with:
           pattern: dist-*
           merge-multiple: true
@@ -435,12 +435,12 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: src-mommy
 
       - name: Checkout aur-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/aur-mommy
           path: aur-mommy
@@ -501,11 +501,11 @@ jobs:
 
     steps:
       - name: Checkout mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: src-mommy
       - name: Checkout homebrew-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/homebrew-mommy
           path: homebrew-mommy

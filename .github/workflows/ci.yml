@@ -32,7 +32,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script
         run: make test
 
@@ -63,7 +63,7 @@ jobs:
           NONINTERACTIVE=1 \
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
       - name: Checkout homebrew-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/homebrew-mommy
           path: homebrew-mommy
@@ -87,6 +87,7 @@ jobs:
 
           printf "::group::Install\n"
           brew tap local/mommy "$(pwd)/homebrew-mommy"
+          brew trust --formula local/mommy/mommy
           brew install mommy --HEAD
           printf "::endgroup::\n"
 
@@ -140,7 +141,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           path: mommy
       - name: Fix mommy directory ownership
@@ -174,7 +175,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout aur-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/aur-mommy
           path: aur-mommy
@@ -238,7 +239,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           # Checkout to subdirectory is required for 'pkg/rpkg/rpkg.conf' to correctly determine '${git_props:root}'
           path: mommy
@@ -311,7 +312,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script
         run: make test
 
@@ -336,7 +337,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout homebrew-mommy
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
         with:
           repository: fwdekker/homebrew-mommy
           path: homebrew-mommy
@@ -359,6 +360,7 @@ jobs:
 
           printf "::group::Install\n"
           brew tap local/mommy "$(pwd)/homebrew-mommy"
+          brew trust --formula local/mommy/mommy
           brew install mommy --HEAD
           printf "::endgroup::\n"
 
@@ -376,12 +378,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script and package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: freebsd
-          version: "14.3"
+          version: ${{ vars.FREEBSD_VERSION }}
           run: |
             printf "::group::Install basic packages\n"
             sudo pkg install -y git gmake
@@ -441,12 +443,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script and package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: netbsd
-          version: "10.1"
+          version: ${{ vars.NETBSD_VERSION }}
           run: |
             export PATH="/usr/sbin:$PATH"  # Add 'pkg_*' commands to path
             export MOMMY_ZSH_SKIP=1  # 'script' does not have the '-q' option in NetBSD
@@ -457,7 +459,7 @@ jobs:
 
             printf "::group::Install ShellSpec\n"
             git clone --depth=1 https://github.com/shellspec/shellspec.git /tmp/shellspec/
-            sudo gmake -C /tmp/shellspec/ install
+            sudo gmake -C /tmp/shellspec install
             rm -rf /tmp/shellspec
             printf "::endgroup::\n"
 
@@ -495,12 +497,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Install dependencies for mommy && Test script && Build package && Test package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: openbsd
-          version: "7.8"
+          version: ${{ vars.OPENBSD_VERSION }}
           run: |
             export MOMMY_ZSH_SKIP=1  # 'script' does not have the '-q' option in OpenBSD
 
@@ -574,7 +576,7 @@ jobs:
           printf "::endgroup::\n"
 
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script
         shell: msys2 {0}
         run: make test
@@ -590,7 +592,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Enable nix
         uses: DeterminateSystems/nix-installer-action@main
       - name: Enable cache
@@ -605,12 +607,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script and package
-        uses: cross-platform-actions/action@v0.30.0
+        uses: cross-platform-actions/action@v1
         with:
           operating_system: haiku
-          version: "r1beta5"
+          version: ${{ vars.HAIKU_VERSION }}
           run: |
             export MOMMY_ZSH_SKIP=1  # Haiku does not have the 'script' command
 
@@ -653,7 +655,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Test script and package
         uses: vmactions/solaris-vm@v1
         with:
