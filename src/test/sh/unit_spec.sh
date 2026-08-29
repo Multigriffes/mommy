@@ -194,60 +194,28 @@ Describe "mommy:"
             End
         End
 
-        Describe "override user config file path:"
-            Parameters:value "-c " "--config="
-
-            It "ignores an empty path [$1]"
-                When run "$MOMMY_EXEC" $1"" true
-                The error should be present
-                The status should be success
-            End
-
-            It "ignores an invalid path [$1]"
-                When run "$MOMMY_EXEC" $1"./does_not_exist" true
-                The error should be present
-                The status should be success
-            End
-
-            It "ignores a directory path [$1]"
-                When run "$MOMMY_EXEC" $1"." true
-                The error should be present
-                The status should be success
-            End
-
-            It "uses the configuration from the file [$1]"
-                write_conf "MOMMY_COMPLIMENTS='apply news'" "$(conf_file foo bar.sh)"
-
-                When run "$MOMMY_EXEC" $1"$(conf_file foo bar.sh)" true
-                The error should equal "apply news"
-                The status should be success
-            End
-
-            It "does not change the directory from which a role is loaded [$1]"
-                write_conf "MOMMY_COMPLIMENTS='guide top'" "$(conf_file user roles/shop.sh)"
-
-                When run "$MOMMY_EXEC" $1"$(conf_file foo bar.sh)" --role=shop true
-                The error should equal "guide top"
-                The status should be success
-            End
-        End
-
         Describe "set user config directory:"
             Parameters:value "-u " "--user-config-dir="
+
+            It "gives an error when no argument is given [$1]"
+                When run "$MOMMY_EXEC" $1"" true
+                The error should equal "mommy is missing the argument for option '$(strip_opt "$1")'~"
+                The status should be failure
+            End
+
+            It "gives an error if the config file is unparseable [$1]"
+                write_conf "MOMMY_COMPLIMENTS='" "$(conf_file foo)"
+
+                When run "$MOMMY_EXEC" $1"$(conf_dir foo)" true
+                The error should be present
+                The status should be failure
+            End
 
             It "changes the directory from which the user config is loaded [$1]"
                 write_conf "MOMMY_COMPLIMENTS='beam bowel'" "$(conf_file foo)"
 
                 When run "$MOMMY_EXEC" $1"$(conf_dir foo)" true
                 The error should equal "beam bowel"
-                The status should be success
-            End
-
-            It "does not change the directory from which the user config is loaded if -c/--config is used"
-                write_conf "MOMMY_COMPLIMENTS='tent pipe'" "$(conf_file foo bar.sh)"
-
-                When run "$MOMMY_EXEC" $1"$(conf_dir baz)" -c "$(conf_file foo bar.sh)" true
-                The error should equal "tent pipe"
                 The status should be success
             End
 
@@ -266,6 +234,14 @@ Describe "mommy:"
             It "gives an error when no argument is given [$1]"
                 When run "$MOMMY_EXEC" $1"" true
                 The error should equal "mommy is missing the argument for option '$(strip_opt "$1")'~"
+                The status should be failure
+            End
+
+            It "gives an error if the config file is unparseable [$1]"
+                write_conf "MOMMY_COMPLIMENTS='" "$(conf_file foo)"
+
+                When run "$MOMMY_EXEC" $1"$(conf_dir foo)" true
+                The error should be present
                 The status should be failure
             End
 
@@ -319,7 +295,15 @@ Describe "mommy:"
                 The status should be failure
             End
 
-            It "loads the given role if it exists in the global config dirs and not in the user config dir [$1]"
+            It "gives an error if the role config file is unparseable [$1]"
+                write_conf "MOMMY_COMPLIMENTS='" "$(conf_file user roles/bus.sh)"
+
+                When run "$MOMMY_EXEC" $1"bus" true
+                The error should be present
+                The status should be failure
+            End
+
+            It "loads the given role if it exists in the global config dirs [$1]"
                 write_conf "MOMMY_COMPLIMENTS='gain calf'" "$(conf_file user roles/burst.sh)"
 
                 When run "$MOMMY_EXEC" $1"burst" true
@@ -327,7 +311,16 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "loads the given role if it exists in the user config dir and not in the global config dirs [$1]"
+            It "loads the given role from the first global config dir in which it exists [$1]"
+                write_conf "MOMMY_COMPLIMENTS='frank kneel'" "$(conf_file foo roles/host.sh)"
+                write_conf "MOMMY_COMPLIMENTS='wild worth'" "$(conf_file bar roles/host.sh)"
+
+                When run "$MOMMY_EXEC" -d "$(conf_dir foo):$(conf_dir bar)" $1"host" true
+                The error should equal "frank kneel"
+                The status should be success
+            End
+
+            It "loads the given role if it exists in the user config dir [$1]"
                 write_conf "MOMMY_COMPLIMENTS='lock lie'" "$(conf_file global roles/essay.sh)"
 
                 When run "$MOMMY_EXEC" $1"essay" true
@@ -335,18 +328,18 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "loads the given role from the user config dir even if it also exists in the global config dirs [$1]"
+            It "overrides the global role config with the user's own config [$1]"
                 write_conf "MOMMY_PREFIX='!'" "$(conf_file global roles/plot.sh)"
                 write_conf "MOMMY_COMPLIMENTS='rise part'" "$(conf_file user roles/plot.sh)"
 
                 When run "$MOMMY_EXEC" $1"plot" true
-                The error should equal "rise part"
+                The error should equal "!rise part"
                 The status should be success
             End
         End
 
         Describe "config load order:"
-            It "user config overrides global config"
+            It "makes user config overrides global config"
                 write_conf "MOMMY_COMPLIMENTS='ceremony isolation'" "$(conf_file global)"
                 write_conf "MOMMY_COMPLIMENTS='lesson literature'" "$(conf_file user)"
 
@@ -355,7 +348,7 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "role overrides global config"
+            It "makes role config override global config"
                 write_conf "MOMMY_COMPLIMENTS='bark lunch'" "$(conf_file global)"
                 write_conf "MOMMY_COMPLIMENTS='gas shape'" "$(conf_file user roles/urge.sh)"
 
@@ -364,7 +357,7 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "role overrides user config"
+            It "makes role config override user config"
                 write_conf "MOMMY_COMPLIMENTS='palm inn'" "$(conf_file user)"
                 write_conf "MOMMY_COMPLIMENTS='take nest'" "$(conf_file user roles/high.sh)"
 
@@ -373,7 +366,7 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "overrides cascade, from global to user to role"
+            It "makes overrides cascade, from global to user to role"
                 write_raw "MOMMY_COMPLIMENTS='steel cry';MOMMY_PREFIX='!';MOMMY_SUFFIX='@';MOMMY_COLOR=''" "$(conf_file global)"
                 write_raw "MOMMY_COMPLIMENTS='item fish';MOMMY_PREFIX='%'" "$(conf_file user)"
                 write_raw "MOMMY_COMPLIMENTS='tasty laser'" "$(conf_file user roles/level.sh)"
@@ -772,7 +765,7 @@ stimky<"
             End
 
             It "replaces %%#%%"
-                set_config "MOMMY_COMPLIMENTS='>loud%%#%%talk<'"
+                write_conf "MOMMY_COMPLIMENTS='>loud%%#%%talk<'"
 
                 When run "$MOMMY_EXEC" true
                 The error should equal ">loud#talk<"

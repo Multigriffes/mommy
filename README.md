@@ -346,12 +346,12 @@ if you want to customise where and how mommy installs, you can just compile her 
 1. **prerequisites**
     * [git](https://git-scm.com/)
     * [gnu make](https://www.gnu.org/software/make/) (`gmake`)
-2. **clone repository**
+1. **clone repository**
    ```shell
    git clone https://github.com/fwdekker/mommy.git
    cd mommy
    ```
-3. **install**  
+1. **install**  
    this step builds mommy's files and copies them into your system.
    the exact paths differ per system, so find the instructions that are right for your system.
 
@@ -389,7 +389,7 @@ if you want to customise where and how mommy installs, you can just compile her 
       ```shell
       sudo make install
       ```
-4. **test** (optional)  
+1. **test** (optional)  
    if you want to make sure installation was successful, you can run tests using [shellspec](https://github.com/shellspec/shellspec).
    run the following from inside the cloned mommy repository
    ```shell
@@ -397,7 +397,7 @@ if you want to customise where and how mommy installs, you can just compile her 
    PATH="$(pwd)/shellspec/:$PATH" make system=1 test
    ```
    some tests will be skipped, depending on which other programs you have installed~
-5. **uninstall** (optional)  
+1. **uninstall** (optional)  
    if you want to uninstall after running `make install`, just run the same command as in step 3, except you replace `install` with `uninstall`.
 
    uninstall might not work completely if you installed a different version than the one you're uninstalling.
@@ -455,8 +455,9 @@ additionally, mommy knows a few extra options, which you can use to discover who
 | `-p`         | `--pipefail`                  | when using `-e` or `--eval`, this option enables [pipefail](https://stackoverflow.com/q/68465355/) in the evaluated command. works only if `/bin/sh` on your system supports pipefail~                                                      |
 | `-1`         |                               | writes output to stdout instead of stderr~                                                                                                                                                                                                  |
 | `-t`         | `--toggle`                    | toggles whether mommy should display output at all. applies to all sessions of all shells of the current user, until this option is toggled again. useful if you want to temporarily silence mommy without editing your shell config files~ |
-| `-c <file>`  | `--config=<file>`             | tells mommy that she should read your [config](#configuration) from `<file>`~                                                                                                                                                               |
 | `-d <dirs>`  | `--global-config-dirs=<dirs>` | sets [global configuration dirs](#configuration--config-file-locations) to the colon-separated list in `<dirs>`~                                                                                                                            |
+| `-u <dirs>`  | `--user-config-dir=<dir>`     | sets [user configuration dir](#configuration--config-file-locations) to the given `<dir>`~                                                                                                                                               |
+| `-r <name>`  | `--role=<name>`               | sets [role used by mommy](#configuration--roles) to the given `<name>`; like a profile or mood~                                                                                                                                                                    |
 
 
 ## 🙋 configuration<a name="configuration"></a> <small><sup>[top ▲](#toc)</sup></small>
@@ -481,13 +482,27 @@ after that, she will read the user-specific **local** config file, overriding th
 * to find the **global** config file, mommy runs the following procedure.
     1. mommy determines the list of global config dirs.
         1. if a list is specified using a [command-line option](#usage), that list is used.
-        2. otherwise, the list consists of all directories in `$XDG_CONFIG_DIRS`, plus `/etc/mommy`, plus `/usr/local/etc/mommy/`.
-    2. mommy traverses this list, and stops once she finds a directory that contains the file `config.sh`.
+        1. otherwise, the list consists of all directories in `$XDG_CONFIG_DIRS`, plus `/etc/mommy`, plus `/usr/local/etc/mommy/`.
+    1. mommy traverses this list, and stops once she finds a directory that contains the file `config.sh`.
        this file will be the global config file~
 * to find the **local** config file, mommy runs the following procedure.
     1. if a config file is specified using a [command-line option](#usage), that file is used.
-    2. if `$XDG_CONFIG_HOME` is defined, the file `$XDG_CONFIG_HOME/mommy/config.sh` is used.
-    3. otherwise, `$HOME/.config/mommy/config.sh` is used~
+    1. if `$XDG_CONFIG_HOME` is defined, the file `$XDG_CONFIG_HOME/mommy/config.sh` is used.
+    1. otherwise, `$HOME/.config/mommy/config.sh` is used~
+</details>
+
+<details>
+<summary><a name="configuration--roles"></a>🎭 roles (aka moods/profiles)</summary>
+
+to easily swap between multiple config files, use roles.
+specify a role with a [command-line option](#usage), and mommy will load your role-specific config on top of the standard config loading procedure.
+simply put your extra config file in `mommy/roles/<name>.sh`, and you can now use the role `<name>`.
+mommy searches for these config files in [the same way that she searches for the main config file](#configuration--config-file-locations).
+all in all, if you've configured a role, mommy will load the following config files:
+1. global config file
+1. user config file
+1. global role config file
+1. user role config file
 </details>
 
 <details>
@@ -644,7 +659,7 @@ some steps vary depending on [how and where you installed mommy](#installation)~
      [IO.Directory]::CreateDirectory("$HOME/.config/mommy")
      [IO.File]::WriteAllLines("$HOME/.config/mommy/config.sh", "MOMMY_COLOR=''")
      ```
-2. **test prompt**  
+1. **test prompt**  
    change powershell's prompt to include mommy's message~
    * **wsl**  
      if you want to run mommy through wsl, run
@@ -658,7 +673,7 @@ some steps vary depending on [how and where you installed mommy](#installation)~
      # run this in powershell
      function prompt { "$(& "C:\Program Files\Git\bin\sh.exe" "C:/Users/username/mommy" -1 -s $([int][bool]::Parse(!$?)))> " }
      ```
-3. **save prompt**  
+1. **save prompt**  
    now let's make this prompt persistent.
    in powershell, run `notepad $profile` to open your powershell settings, and add the `function prompt [...]` line from above~
 
@@ -667,7 +682,7 @@ some steps vary depending on [how and where you installed mommy](#installation)~
 
    > **ℹ️ note**  
    > if you get an error that you cannot run local scripts, run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope LocalMachine` as admin, or [sign the script](https://learn.microsoft.com/en-us/powershell/module/microsoft.powershell.core/about/about_signing?view=powershell-7.3#methods-of-signing-scripts)~
-4. **improve prompt**  
+1. **improve prompt**  
    the instructions above show the basics of using mommy in powershell.
    you can make it way cooler using a theme engine like [oh-my-posh](https://ohmyposh.dev/).
    for example, you can use background colors or display mommy in the right prompt instead of the left~
@@ -807,24 +822,24 @@ if that annoys you, run `make build` after each change, and use `build/bin/mommy
 
 1. **requirements**  
    [shellspec](https://github.com/shellspec/shellspec)
-2. **test local code**
+1. **test local code**
    1. all tests
       ```shell
       make test
       ```
-   2. unit tests
+   1. unit tests
       ```shell
       make test/unit
       ```
-   3. integration tests
+   1. integration tests
       ```shell
       make test/integration
       ```
-3. **test installed binary**
+1. **test installed binary**
    ```shell
    make system=1 test
    ```
-4. **configuration**  
+1. **configuration**  
    except for `system=1`, test behaviour is configured with environment variables.
    check the various files in [`src/test/`](https://github.com/fwdekker/mommy/tree/main/src/test) to find 'em all~
 </details>
