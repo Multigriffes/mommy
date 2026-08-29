@@ -6,6 +6,9 @@
 * 🌞 mommy once again distributes a package for solaris, attached as a `.p5p` file to each github release~ ([#176](https://github.com/fwdekker/mommy/issues/176))
 * 🍱 mommy now also runs tests on busybox~ (#TODO)
 
+## [1.8.1] -- 2026-08-29
+### added
+* 🫦 mommy can now be a little more thirsty ([#183](https://github.com/fwdekker/mommy/pull/183))
 
 ## [1.8.0] -- 2025-12-03
 ### added
