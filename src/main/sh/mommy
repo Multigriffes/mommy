@@ -8,7 +8,7 @@ MOMMY_CAREGIVER="mommy"
 MOMMY_PRONOUNS="she her her hers herself"
 MOMMY_SWEETIE="${LOGNAME:-girl}"
 MOMMY_PARTS="milk"
-MOMMY_BAD_SWEETIE="slut/toy/pet/pervert/whore"
+MOMMY_SWEETIE_ENCOURAGE="${LOGNAME:-girl}"
 MOMMY_PREFIX=""
 MOMMY_SUFFIX="~"
 
@@ -46,7 +46,7 @@ MOMMY_ENCOURAGEMENTS="
 # trust~
 %%CAREGIVER%% believes in you
 %%CAREGIVER%% knows you'll get there
-%%CAREGIVER%% knows %%THEIR%% little %%SWEETIE%% can do better
+%%CAREGIVER%% knows %%THEIR%% little %%SWEETIE_ENCOURAGEMENT%% can do better
 just know that %%CAREGIVER%% still loves you
 
 # consolation~
@@ -65,7 +65,7 @@ just a little further, %%CAREGIVER%% knows you can do it
 %%CAREGIVER%% knows you'll get there, don't worry about it
 
 # clean up~
-did %%CAREGIVER%%'s %%SWEETIE%% make a big mess
+did %%CAREGIVER%%'s %%SWEETIE_ENCOURAGEMENT%% make a big mess
 "
 MOMMY_ENCOURAGEMENTS_EXTRA=""
 MOMMY_ENCOURAGEMENTS_ENABLED="1"
@@ -300,7 +300,7 @@ split_pronouns() {
 #    * `%%THEIRS%%` with the fourth word of the same random entry from `$3`,
 #    * `%%THEMSELF%%` with the fifth word of the same random entry frm `$3`,
 #    * `%%SWEETIE%%` with a random entry from `$4`,
-#    * `%%BAD_SWEETIE%%` with a random entry from `$5`,
+#    * `%%SWEETIE_ENCOURAGEMENT%%` with a random entry from `$5`,
 #    * `%%PART%%` with a random entry from `$6`,
 #    * `%%N%%` with a literal newline character,
 #    * `%%S%%` with a literal forward slash character,
@@ -314,7 +314,7 @@ fill_template() {
     list_normal_choose "$2"; caregiver="$list_choose__out"
     list_normal_choose "$3"; split_pronouns "$list_choose__out"
     list_normal_choose "$4"; sweetie="$list_choose__out"
-    list_normal_choose "$5"; bad_sweetie="$list_choose__out"
+    list_normal_choose "$5"; sweetie_encouragement="$list_choose__out"
     list_normal_choose "$6"; part="$list_choose__out"
     list_normal_choose "$7"; prefix="$list_choose__out"
     list_normal_choose "$8"; suffix="$list_choose__out"
@@ -327,7 +327,7 @@ fill_template() {
     replace_all "$replace_all__out" "%%THEIRS%%" "$theirs"
     replace_all "$replace_all__out" "%%THEMSELF%%" "$themself"
     replace_all "$replace_all__out" "%%SWEETIE%%" "$sweetie"
-    replace_all "$replace_all__out" "%%BAD_SWEETIE%%" "$bad_sweetie"
+    replace_all "$replace_all__out" "%%SWEETIE_ENCOURAGEMENT%%" "$sweetie_encouragement"
     replace_all "$replace_all__out" "%%PART%%" "$part"
     replace_all "$replace_all__out" "%%N%%" "$n"
     replace_all "$replace_all__out" "%%S%%" "/"
@@ -483,7 +483,7 @@ else
     # Select and fill template
     list_normalize "$MOMMY_FORBIDDEN_WORDS"; forbidden_words="$list_normalize__out"
     list_normal_choose "$templates" "$forbidden_words"; template="$list_choose__out"
-    fill_template "$template" "$MOMMY_CAREGIVER" "$MOMMY_PRONOUNS" "$MOMMY_SWEETIE" "$MOMMY_BAD_SWEETIE" "$MOMMY_PARTS" "$MOMMY_PREFIX" "$MOMMY_SUFFIX" \
+    fill_template "$template" "$MOMMY_CAREGIVER" "$MOMMY_PRONOUNS" "$MOMMY_SWEETIE" "$MOMMY_SWEETIE_ENCOURAGE" "$MOMMY_PARTS" "$MOMMY_PREFIX" "$MOMMY_SUFFIX" \
                   "$MOMMY_CAPITALIZE"; response="$fill_template__out"
     list_filter_not "$response" "$forbidden_words"; safe_response="$list_filter_not__out"
 
