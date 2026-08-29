@@ -38,6 +38,7 @@ find your operating system and package manager for the right instructions~
   (requires [brew](https://brew.sh/).)
   ```shell
   brew tap fwdekker/mommy
+  brew trust --formula fwdekker/mommy/mommy  # only if using homebrew 6.0.0 or newer
   brew install mommy
   ```
   after installing, check the [brew documentation on how to enable shell completions](https://docs.brew.sh/Shell-Completion)~
@@ -83,6 +84,7 @@ find your operating system and package manager for the right instructions~
   (requires [brew](https://brew.sh/).)
   ```shell
   brew tap fwdekker/mommy
+  brew trust --formula fwdekker/mommy/mommy  # only if using homebrew 6.0.0 or newer
   brew install mommy
   ```
   after installing, check the [brew documentation on how to enable shell completions](https://docs.brew.sh/Shell-Completion)~
@@ -137,6 +139,7 @@ find your operating system and package manager for the right instructions~
   (requires [brew](https://brew.sh/).)
   ```shell
   brew tap fwdekker/mommy
+  brew trust --formula fwdekker/mommy/mommy  # only if using homebrew 6.0.0 or newer
   brew install mommy
   ```
   after installing, check the [brew documentation on how to enable shell completions](https://docs.brew.sh/Shell-Completion)~
@@ -181,6 +184,7 @@ find your operating system and package manager for the right instructions~
   (requires [brew](https://brew.sh/).)
   ```shell
   brew tap fwdekker/mommy
+  brew trust --formula fwdekker/mommy/mommy  # only if using homebrew 6.0.0 or newer
   brew install mommy
   ```
   after installing, check the [brew documentation on how to enable shell completions](https://docs.brew.sh/Shell-Completion)~
@@ -296,6 +300,7 @@ find your operating system and package manager for the right instructions~
   (requires [brew](https://brew.sh/).)
   ```shell
   brew tap fwdekker/mommy
+  brew trust --formula fwdekker/mommy/mommy  # only if using homebrew 6.0.0 or newer
   brew install mommy
   ```
   after installing, check the
