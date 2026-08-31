@@ -723,12 +723,38 @@ Describe "mommy:"
                 The status should be success
             End
 
-            It "replaces %%SWEETIE%%"
-                write_conf "MOMMY_COMPLIMENTS='>%%SWEETIE%%<';MOMMY_SWEETIE='attempt'"
+            Describe "replacing %%SWEETIE"
+                It "replaces %%SWEETIE%% with MOMMY_SWEETIE in compliments if MOMMY_SWEETIE_ENCOURAGE is not set"
+                    write_conf "MOMMY_COMPLIMENTS='>%%SWEETIE%%<';MOMMY_SWEETIE='attempt'"
 
-                When run "$MOMMY_EXEC" true
-                The error should equal ">attempt<"
-                The status should be success
+                    When run "$MOMMY_EXEC" true
+                    The error should equal ">attempt<"
+                    The status should be success
+                End
+
+                It "replaces %%SWEETIE%% with MOMMY_SWEETIE in compliments if MOMMY_SWEETIE_ENCOURAGE is set"
+                    write_conf "MOMMY_COMPLIMENTS='>%%SWEETIE%%<';MOMMY_SWEETIE='jet';MOMMY_SWEETIE_ENCOURAGE='debt'"
+
+                    When run "$MOMMY_EXEC" true
+                    The error should equal ">jet<"
+                    The status should be success
+                End
+
+                It "replaces %%SWEETIE%% with MOMMY_SWEETIE in encouragements if MOMMY_SWEETIE_ENCOURAGE is not set"
+                    write_conf "MOMMY_ENCOURAGEMENTS='>%%SWEETIE%%<';MOMMY_SWEETIE='rest'"
+
+                    When run "$MOMMY_EXEC" false
+                    The error should equal ">rest<"
+                    The status should be failure
+                End
+
+                It "replaces %%SWEETIE%% with MOMMY_SWEETIE_ENCOURAGE if MOMMY_SWEET_ENCOURAGE is set"
+                    write_conf "MOMMY_ENCOURAGEMENTS='>%%SWEETIE%%<';MOMMY_SWEETIE='road';MOMMY_SWEETIE_ENCOURAGE='pier'"
+
+                    When run "$MOMMY_EXEC" false
+                    The error should equal ">pier<"
+                    The status should be failure
+                End
             End
 
             It "replaces %%CAREGIVER%%"

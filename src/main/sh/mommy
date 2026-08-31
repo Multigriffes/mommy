@@ -7,6 +7,7 @@ n="
 MOMMY_CAREGIVER="mommy"
 MOMMY_PRONOUNS="she her her hers herself"
 MOMMY_SWEETIE="${LOGNAME:-girl}"
+unset MOMMY_SWEETIE_ENCOURAGE
 MOMMY_PREFIX=""
 MOMMY_SUFFIX="~"
 
@@ -504,6 +505,7 @@ else
         templates="$MOMMY_COMPLIMENTS$n$MOMMY_COMPLIMENTS_EXTRA"
     elif [ 0 -ne "$command_exit_code" ] && [ 1 -eq "$MOMMY_ENCOURAGEMENTS_ENABLED" ]; then
         templates="$MOMMY_ENCOURAGEMENTS$n$MOMMY_ENCOURAGEMENTS_EXTRA"
+        MOMMY_SWEETIE="${MOMMY_SWEETIE_ENCOURAGE:-"$MOMMY_SWEETIE"}"
     else
         exit "$command_exit_code"
     fi
