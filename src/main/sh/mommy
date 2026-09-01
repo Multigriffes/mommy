@@ -90,10 +90,10 @@ require_int() {
     esac
 }
 
-# Dies if `$OPTARG` contains the symbol '.' or the symbol '/'
-require_not_path() {
+# Dies if `$OPTARG` contains the symbol '/', '.', or '\n'
+require_file_stem() {
     case "$OPTARG" in
-    *.*|*/*) die "mommy expected the argument for option '$OPT' to contain neither '.' nor '/', but was '$OPTARG'~" ;;
+    */*|*.*|*$n*) die "mommy expected the argument for option '$OPT' to not contain '/', '.', or '\n', but was '$OPTARG'~" ;;
     *) return 0 ;;
     esac
 }
@@ -249,9 +249,14 @@ list_normalize() {
     return 0
 }
 
-# Outputs a random line from `$1` to `$list_choose__out`.
-if [ -x "$(command -v shuf)" ]; then
+# Outputs a random line from `$1` to `$list_choose__out`. If `$1` is empty, the output is also empty.
+if command -v shuf >/dev/null; then
     list_choose() {
+        if [ "x" = "x$1" ]; then
+            list_choose__out=""
+            return 0
+        fi
+
         # TODO[Workaround]: Enable shellcheck check after https://github.com/koalaman/shellcheck/issues/2937 is merged
         # shellcheck disable=SC2319 # False positive
         test "x${-#*f}" != "x$-"; list_choose__glob="$?"; set -f; list_choose__ifs="$IFS"; IFS="$n"
@@ -263,6 +268,11 @@ if [ -x "$(command -v shuf)" ]; then
     }
 else
     list_choose() {
+        if [ "x" = "x$1" ]; then
+            list_choose__out=""
+            return 0
+        fi
+
         list_choose__lines="$1"
         list_choose__count="$(printf "%s\n" "$list_choose__lines" | wc -l)"
         list_choose__idx="$(jot -r 1 1 "$list_choose__count")"
@@ -276,6 +286,13 @@ fi
 list_normal_choose() {
     list_normalize "$1" "$2"
     list_choose "$list_normalize__out"
+}
+
+# Selects a random entry from the comma-or-newline-separated list in `$1` and writes its selection to
+# `$list_choose__out`.
+list_args_choose() {
+    split "$1" ","
+    list_choose "$split__out"
 }
 #endregion
 
@@ -404,7 +421,7 @@ while getopts ":hve:ps:1tu:d:r:-:" OPT; do
     t|toggle) opt_toggle="1" ;;
     u|user-config-dir) require_arg; opt_user_config_dir="$OPTARG" ;;
     d|global-config-dirs) require_arg; opt_global_config_dirs="$OPTARG" ;;
-    r|role) require_arg; require_not_path; opt_role="$OPTARG" ;;
+    r|role) require_arg; require_file_stem; opt_role="$OPTARG" ;;
     :) die "mommy's last option is missing its argument~" ;;
     ?) die "mommy doesn't know option -$OPTARG~" ;;
     *) die "mommy doesn't know option --$OPT~" ;;
@@ -446,6 +463,7 @@ fi
 load_config "$opt_global_config_dirs" "mommy/config.sh"
 load_config "$opt_user_config_dir" "mommy/config.sh"
 
+list_args_choose "$opt_role"; opt_role="$list_choose__out"
 if [ "x" != "x$opt_role" ]; then
     load_config "$opt_global_config_dirs" "mommy/roles/$opt_role.sh"; loaded_role__1="$?"
     load_config "$opt_user_config_dir" "mommy/roles/$opt_role.sh"; loaded_role__2="$?"

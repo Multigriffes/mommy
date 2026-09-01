@@ -1,6 +1,9 @@
 #!/bin/sh
 # shellcheck disable=SC2317 # False positive when using `return` or `exit` inside `Mock`
 
+n="
+"
+
 ## Use isolated XDG directories
 XDG_CONFIG_DIRS="$MOMMY_TMP_DIR/global/"
 export XDG_CONFIG_DIRS
@@ -289,6 +292,24 @@ Describe "mommy:"
                 The status should be failure
             End
 
+            It "gives an error if the role string contains a '/' [$1]"
+                When run "$MOMMY_EXEC" $1"sw/im" true
+                The error should equal "mommy expected the argument for option '$(strip_opt "$1")' to not contain '/', '.', or '\n', but was 'sw/im'~"
+                The status should be failure
+            End
+
+            It "gives an error if the role string contains a '.' [$1]"
+                When run "$MOMMY_EXEC" $1"pr.ess" true
+                The error should equal "mommy expected the argument for option '$(strip_opt "$1")' to not contain '/', '.', or '\n', but was 'pr.ess'~"
+                The status should be failure
+            End
+
+            It "gives an error if the role string contains a '\n' [$1]"
+                When run "$MOMMY_EXEC" $1"ba${n}by" true
+                The error should equal "mommy expected the argument for option '$(strip_opt "$1")' to not contain '/', '.', or '\n', but was 'ba${n}by'~"
+                The status should be failure
+            End
+
             It "gives an error if the role exists in neither global config dirs nor in the user config dir [$1]"
                 When run "$MOMMY_EXEC" $1"axis" true
                 The error should equal "mommy does not know the role 'axis'~"
@@ -335,6 +356,24 @@ Describe "mommy:"
                 When run "$MOMMY_EXEC" $1"plot" true
                 The error should equal "!rise part"
                 The status should be success
+            End
+
+            It "loads either given role [$1]"
+                # Probability of 1/(2^15)=1/32768 to fail even if code is correct
+
+                write_conf "MOMMY_COMPLIMENTS='exit'" "$(conf_file user roles/cheek.sh)"
+                write_conf "MOMMY_COMPLIMENTS='plan'" "$(conf_file user roles/chair.sh)"
+
+                outputs=","
+                i=1
+                while [ $i -le 16 ]; do
+                    outputs="$outputs$("$MOMMY_EXEC" $1"cheek,chair" true 2>&1),"
+                    i=$((i + 1))
+                done
+
+                When call printf "%s" "$outputs"
+                The output should include ",exit,"
+                The output should include ",plan,"
             End
         End
 
@@ -769,8 +808,7 @@ Describe "mommy:"
                 write_conf "MOMMY_COMPLIMENTS='>bottom%%N%%stimky<'"
 
                 When run "$MOMMY_EXEC" true
-                The error should equal ">bottom
-stimky<"
+                The error should equal ">bottom${n}stimky<"
                 The status should be success
             End
 
