@@ -457,7 +457,7 @@ additionally, mommy knows a few extra options, which you can use to discover who
 | `-t`         | `--toggle`                    | toggles whether mommy should display output at all. applies to all sessions of all shells of the current user, until this option is toggled again. useful if you want to temporarily silence mommy without editing your shell config files~ |
 | `-d <dirs>`  | `--global-config-dirs=<dirs>` | sets [global configuration dirs](#configuration--config-file-locations) to the colon-separated list in `<dirs>`~                                                                                                                            |
 | `-u <dirs>`  | `--user-config-dir=<dir>`     | sets [user configuration dir](#configuration--config-file-locations) to the given `<dir>`~                                                                                                                                               |
-| `-r <name>`  | `--role=<name>`               | sets [role used by mommy](#configuration--roles) to the given `<name>`; like a profile or mood~                                                                                                                                                                    |
+| `-r <name>`  | `--role=<name>`               | sets [role used by mommy](#configuration--roles) to the given `<name>`. can also be a comma-separated list of role names, in which case mommy randomly selects one. role names cannot contain the symbol `.`, `/`, or `\n`~                                        |
 
 
 ## 🙋 configuration<a name="configuration"></a> <small><sup>[top ▲](#toc)</sup></small>
@@ -496,9 +496,13 @@ after that, she will read the user-specific **local** config file, overriding th
 
 to easily swap between multiple config files, use roles.
 specify a role with a [command-line option](#usage), and mommy will load your role-specific config on top of the standard config loading procedure.
-simply put your extra config file in `mommy/roles/<name>.sh`, and you can now use the role `<name>`.
-mommy searches for these config files in [the same way that she searches for the main config file](#configuration--config-file-locations).
-all in all, if you've configured a role, mommy will load the following config files:
+simply put your extra config file in `mommy/roles/<name>.sh`, and now you can now use the role `<name>`~
+  
+you can also provide a comma-separated list of roles.
+if you do that, mommy will randomly select one~
+
+mommy searches for role config files in [the same way that she searches for the main config file](#configuration--config-file-locations).
+so, all in all, if you've configured a role, mommy will load the following config files in this order:
 1. global config file
 1. user config file
 1. global role config file

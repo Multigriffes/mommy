@@ -4,7 +4,7 @@
 * 🔧 mommy no longer supports `-c`/`--config` arguments. instead, to specify a specific config file, use a combination of `-u`/`--user-config-dir` and `-d`/`--global-config-dirs` to specify the directory to search in, and `-r`/`--role` to specify the file. see the readme for full details~ (#TODO)
 
 ### added
-* 🎭 mommy now supports roles (aka moods/profiles) so you can easily swap between several config files. to add a role `foo`, place your role config in `$HOME/.config/mommy/roles/foo.sh`, and run mommy with `-r foo` or `--role=foo`~
+* 🎭 mommy now supports roles (aka moods/profiles) so you can easily swap between several config files. to add a role `foo`, place your role config in `$HOME/.config/mommy/roles/foo.sh`, and run mommy with `-r foo` or `--role=foo`. you can also let mommy select one of multiple roles randomly by giving a comma-separated list, as in `--role=foo,bar`~
 * 💵 mommy now includes bash completions~ ([#43](https://github.com/fwdekker/mommy/issues/43)) ([#170](https://github.com/fwdekker/mommy/issues/170))
 * 🫂 mommy now supports configuring `MOMMY_SWEETIE_ENCOURAGE` to override the value of `MOMMY_SWEETIE` only in encouragements~ ([#183](https://github.com/fwdekker/mommy/pull/183))
 * #️⃣ mommy now supports templates starting with `#` using `%%#%%`~ ([#173](https://github.com/fwdekker/mommy/issues/173)) ([#174](https://github.com/fwdekker/mommy/issues/174))
