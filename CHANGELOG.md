@@ -1,15 +1,15 @@
 # Changelog
-## [9.9.9-unreleased] -- 9999-12-31
+## [2.0.0] -- 2026-09-02
 ### breaking
-* 🔧 mommy no longer supports `-c`/`--config` arguments. instead, to specify a specific config file, use a combination of `-u`/`--user-config-dir` and `-d`/`--global-config-dirs` to specify the directory to search in, and `-r`/`--role` to specify the file. see the readme for full details~ (#TODO)
+* 🔧 mommy no longer supports `-c`/`--config` arguments. instead, to specify a specific config file, use a combination of `-u`/`--user-config-dir` and `-d`/`--global-config-dirs` to specify the directory to search in, and `-r`/`--role` to specify the file. see the readme for full details~ ([#44](https://github.com/fwdekker/mommy/issues/44)) ([#187](https://github.com/fwdekker/mommy/issues/187))
 
 ### added
-* 🎭 mommy now supports roles (aka moods/profiles) so you can easily swap between several config files. to add a role `foo`, place your role config in `$HOME/.config/mommy/roles/foo.sh`, and run mommy with `-r foo` or `--role=foo`. you can also let mommy select one of multiple roles randomly by giving a comma-separated list, as in `--role=foo,bar`~
+* 🎭 mommy now supports roles (aka moods/profiles) so you can easily swap between several config files. to add a role `foo`, place your role config in `$HOME/.config/mommy/roles/foo.sh`, and run mommy with `-r foo` or `--role=foo`. you can also let mommy select one of multiple roles randomly by giving a comma-separated list, as in `--role=foo,bar`~ ([#44](https://github.com/fwdekker/mommy/issues/44)) ([#186](https://github.com/fwdekker/mommy/issues/186)) ([#187](https://github.com/fwdekker/mommy/issues/187)) ([#188](https://github.com/fwdekker/mommy/issues/188))
 * 💵 mommy now includes bash completions~ ([#43](https://github.com/fwdekker/mommy/issues/43)) ([#170](https://github.com/fwdekker/mommy/issues/170))
 * 🫂 mommy now supports configuring `MOMMY_SWEETIE_ENCOURAGE` to override the value of `MOMMY_SWEETIE` only in encouragements~ ([#183](https://github.com/fwdekker/mommy/pull/183))
 * #️⃣ mommy now supports templates starting with `#` using `%%#%%`~ ([#173](https://github.com/fwdekker/mommy/issues/173)) ([#174](https://github.com/fwdekker/mommy/issues/174))
 * 🌞 mommy once again distributes a package for solaris, attached as a `.p5p` file to each github release~ ([#176](https://github.com/fwdekker/mommy/issues/176))
-* 🍱 mommy now also runs tests on busybox~ (#TODO)
+* 🍱 mommy now also runs tests on busybox~ ([#185](https://github.com/fwdekker/mommy/issues/185))
 
 
 ## [1.8.0] -- 2025-12-03

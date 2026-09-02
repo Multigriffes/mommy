@@ -972,3 +972,5 @@ if mommy should add, remove, or change anything here, [open an issue](https://gi
 * mommy thanks [bikolyn](https://github.com/Bikoil) for [making mommy refer to people by their username by default](https://github.com/fwdekker/mommy/issues/131)~
 * mommy thanks [toria](https://github.com/ninetailedtori) for [documenting how to configure starship](https://github.com/fwdekker/mommy/pull/135), [maintaining the mommy-git package on the aur](https://aur.archlinux.org/packages/mommy-git), and [adding completions for bash](https://github.com/fwdekker/mommy/pull/170)~
 * mommy thanks [david scann](https://github.com/DavidScann) for [providing feedback on the toggle feature](https://github.com/fwdekker/mommy/issues/46#issuecomment-2888498320)~
+* mommy thanks [tiesinto](https://github.com/tiesinto) for [improving the freebsd installation instructions](https://github.com/fwdekker/mommy/pull/179)~
+* mommy thanks [multigriffes](https://github.com/Multigriffes) for [adding new configurable variables](https://github.com/fwdekker/mommy/pull/179)~
